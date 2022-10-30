@@ -2,7 +2,17 @@ module RailsDb
   module Connection
 
     def connection
-      DbModel.connection
+      unless defined?(ReadOnlyConnection)
+        Object.const_set('ReadOnlyConnection', Class.new(ActiveRecord::Base) do
+          self.abstract_class = true
+          def self.name
+            'RailsDb::Connection::ReadOnlyConnection'
+          end
+          establish_connection(:readonly)
+        end)
+      end
+
+      ReadOnlyConnection.connection
     end
 
     def columns
@@ -20,6 +30,5 @@ module RailsDb
     def column_names
       columns.collect(&:name)
     end
-
   end
 end

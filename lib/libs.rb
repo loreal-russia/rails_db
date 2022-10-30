@@ -2,7 +2,6 @@ require_relative 'rails_db/version'
 
 require_relative 'rails_db/connection'
 require_relative 'rails_db/database'
-require_relative 'rails_db/db_model'
 require_relative 'rails_db/blank_results'
 require_relative 'rails_db/mysql_result'
 require_relative 'rails_db/result'
