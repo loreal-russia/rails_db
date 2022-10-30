@@ -1,10 +1,11 @@
 module RailsDb
   module Connection
+    def connector
+      RailsDb.connector
+    end
 
     def connection
-      ActiveRecord::Base.connection
-    rescue ActiveRecord::ConnectionNotEstablished
-      ActiveRecord::Base.establish_connection(Rails.application.config.database_configuration[Rails.env]).connection
+      connector.connection
     end
 
     def columns
@@ -22,6 +23,5 @@ module RailsDb
     def column_names
       columns.collect(&:name)
     end
-
   end
 end

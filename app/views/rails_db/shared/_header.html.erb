@@ -17,27 +17,6 @@
           SQL Editor
         <% end %>
       </li>
-      <li>|</li>
-      <li>
-        <%= link_to rails_db.sql_import_path do %>
-          <%= fa_icon 'download' %>
-          Import
-        <% end %>
-      </li>
-      <li>|</li>
-      <li>
-        <%= link_to rails_db.data_table_path do %>
-          <%= fa_icon 'table' %>
-          Data Table
-        <% end %>
-      </li>
-      <li>|</li>
-      <li>
-        <%= link_to rails_db.standalone_path do %>
-          <%= fa_icon 'circle' %>
-          Command Line
-        <% end %>
-      </li>
     </ul>
     <% if defined?  main_app.root_url %>
     <ul class="inline-list right main_nav">

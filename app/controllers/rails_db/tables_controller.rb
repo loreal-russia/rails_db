@@ -16,8 +16,6 @@ module RailsDb
     end
 
     def create
-      @record = model.new(record_attributes)
-      @record.save!
       build_search
       respond_to do |page|
         page.html { redirect_to action: :data, table_id: params[:table_id] }
@@ -47,13 +45,11 @@ module RailsDb
     end
 
     def truncate
-      @table.truncate
       render :data
     end
 
     def destroy
       build_search
-      @table.delete(params[:pk_id])
       respond_to do |page|
         page.html { redirect_to action: :data, table_id: params[:table_id] }
         page.js {}
@@ -69,8 +65,6 @@ module RailsDb
     end
 
     def update
-      @record = @table.as_model.find(params[:pk_id])
-      @record.update_attributes(record_attributes)
       respond_to do |page|
         page.html { redirect_to action: :data, table_id: params[:table_id] }
         page.js {}
