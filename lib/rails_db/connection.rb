@@ -2,9 +2,7 @@ module RailsDb
   module Connection
 
     def connection
-      ActiveRecord::Base.connection
-    rescue ActiveRecord::ConnectionNotEstablished
-      ActiveRecord::Base.establish_connection(Rails.application.config.database_configuration[Rails.env]).connection
+      ActiveRecord::Base.establish_connection(:readonly)
     end
 
     def columns
