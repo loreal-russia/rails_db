@@ -2,7 +2,7 @@ module RailsDb
   module Connection
 
     def connection
-      ActiveRecord::Base.establish_connection(:readonly)
+      DbModel.connection
     end
 
     def columns
