@@ -6,15 +6,29 @@ module RailsDb
 
       MULTI_STATEMENT_HELP_TEXT = "EXPERIMENTAL: You can import only file with SQL statements separated by ';'. Each new statement must start from new line."
 
+      def self.execute_with_rollback
+        ActiveRecord::Base.transaction do
+          yield
+          raise ActiveRecord::Rollback
+        end
+      end
+
       def self.execute(sql)
         t0 = Time.now
-        connection.execute(sql)
+        execute_with_rollback do
+          connection.execute(sql)
+        end
         Time.now - t0
       end
 
       def self.exec_query(sql)
         t0 = Time.now
-        results = connection.exec_query(sql)
+        results = nil
+
+        execute_with_rollback do
+          results = connection.exec_query(sql)
+        end
+
         execution_time = Time.now - t0
         [results, execution_time]
       end
@@ -35,18 +49,9 @@ module RailsDb
         'text/x-sql'
       end
 
-      def self.truncate(table_name)
-        execute("TRUNCATE TABLE #{table_name};")
-      end
+      def self.truncate; end
 
-      def self.delete(table_name, pk_name, pk_id)
-        case pk_id
-          when Fixnum, Bignum then
-            execute("DELETE FROM #{table_name} WHERE #{pk_name} = #{pk_id};")
-          else
-            execute("DELETE FROM #{table_name} WHERE #{pk_name} = '#{pk_id}';")
-        end
-      end
+      def self.delete; end
 
       def self.count(table_name)
         select("SELECT COUNT(*) FROM #{table_name}")[0].rows.flatten.last.to_i
@@ -64,7 +69,9 @@ module RailsDb
 
       def self.multiple_execute(sql, divider = ";\n")
         sql.split(divider).each do |statement|
-          connection.execute(statement)
+          execute_with_rollback do
+            connection.execute(statement)
+          end
         end
       end
 
