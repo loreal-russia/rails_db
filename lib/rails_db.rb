@@ -45,6 +45,8 @@ module RailsDb
   mattr_accessor :verify_access_proc
   @@verify_access_proc = proc { |controller| true }
 
+  mattr_accessor :connector
+
   def self.setup
     yield(self)
   end

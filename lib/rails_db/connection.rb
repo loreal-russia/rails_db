@@ -1,18 +1,7 @@
 module RailsDb
   module Connection
-
     def connection
-      unless defined?(ReadOnlyConnection)
-        Object.const_set('ReadOnlyConnection', Class.new(ActiveRecord::Base) do
-          self.abstract_class = true
-          def self.name
-            'RailsDb::Connection::ReadOnlyConnection'
-          end
-          establish_connection(:readonly)
-        end)
-      end
-
-      ReadOnlyConnection.connection
+      RailsDb.connector.connection
     end
 
     def columns
