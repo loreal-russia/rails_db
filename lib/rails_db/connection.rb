@@ -1,7 +1,11 @@
 module RailsDb
   module Connection
+    def connector
+      RailsDb.connector
+    end
+
     def connection
-      RailsDb.connector.connection
+      connector.connection
     end
 
     def columns

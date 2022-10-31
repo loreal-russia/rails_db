@@ -7,7 +7,7 @@ module RailsDb
       MULTI_STATEMENT_HELP_TEXT = "EXPERIMENTAL: You can import only file with SQL statements separated by ';'. Each new statement must start from new line."
 
       def self.execute_with_rollback
-        ActiveRecord::Base.transaction do
+        connection.transaction do
           yield
           raise ActiveRecord::Rollback
         end
@@ -74,8 +74,6 @@ module RailsDb
           end
         end
       end
-
     end
-
   end
 end
