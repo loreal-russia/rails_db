@@ -15,7 +15,7 @@
     <hr>
     <%= render 'explain', sql_query: sql_query, sql: sql %>
     <% if count > limit %>
-      <p>Only first <%= limit %> rows are shown. You can export all rows in CSV or XLS.</p>
+      <p>Only the first <%= limit %> rows are shown. You can export all rows to CSV or XLS.</p>
     <% end %>
     <div class='scrollable'>
       <table>
