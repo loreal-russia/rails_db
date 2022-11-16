@@ -31,13 +31,12 @@ module RailsDb
     end
 
     def to_csv
-      CSV.generate do |csv|
-        csv << data.columns
-        data.rows.each do |row|
-          csv << row
-        end
+      io = StringIO.new
+      io.write CSV.generate_line(data.columns)
+      data.rows.each do |row|
+        io.write CSV.generate_line(row)
       end
+      io.string
     end
-
   end
 end
