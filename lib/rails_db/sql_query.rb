@@ -32,11 +32,15 @@ module RailsDb
 
     def to_csv
       io = StringIO.new
+      write_csv(io)
+      io.string
+    end
+
+    def write_csv(io)
       io.write CSV.generate_line(data.columns)
       data.rows.each do |row|
         io.write CSV.generate_line(row)
       end
-      io.string
     end
   end
 end
