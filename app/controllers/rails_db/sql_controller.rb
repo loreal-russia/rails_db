@@ -10,7 +10,12 @@ module RailsDb
     end
 
     def csv
-      send_data(@sql_query.to_csv, type: 'text/csv; charset=utf-8; header=present', filename: 'results.csv')
+      file = Tempfile.new('results', Rails.application.paths['tmp'].expanded)
+      @sql_query.write_csv(file)
+      file.close
+      send_file(file.path, type: 'text/csv; charset=utf-8; header=present', filename: 'results.csv')
+    rescue StandardError => _e
+      file.close!
     end
 
     def xls
