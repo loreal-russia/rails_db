@@ -1,0 +1,7 @@
+<%= form_tag path, style: 'display: inline;' do %>
+  <%= hidden_field_tag 'sql', sql %>
+  <%= button_tag class: 'radius warning label' do %>
+    <%= fa_icon('file-text-o') %>
+    <%= label %>
+  <% end %>
+<% end %>
