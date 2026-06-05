@@ -48,21 +48,19 @@ module RailsDb
 
     def create_model(table_name, &block)
       begin
-        klass = Class.new(connector) do
+        klass = Class.new(ActiveRecord::Base) do
           def self.model_name
             ActiveModel::Name.new(self, nil, table_name)
           end
           self.table_name = table_name
           self.inheritance_column = nil
-          def self.ransackable_attributes(_auth_object = nil)
-            ['q']
-          end
-          def self.ransackable_associations(_auth_object = nil)
-            []
-          end
         end
+        klass.count # verify that it works, if not load other, hack
+      rescue
+        klass = ActiveRecord::Base.descendants.detect { |c| c.table_name == table_name }
       end
 
+      add_ransack_methods(klass)
       klass.class_eval(&block) if block_given?
 
       klass
@@ -70,6 +68,21 @@ module RailsDb
 
     def as_model
       @model ||= create_model(name)
+    end
+
+
+    def add_ransack_methods(klass)
+      klass.define_singleton_method(:ransackable_attributes) do |_auth_object = nil|
+        column_names.map(&:to_sym) + column_names
+      end
+
+      klass.define_singleton_method(:ransortable_attributes) do |_auth_object = nil|
+        column_names.map(&:to_sym) + column_names
+      end
+
+      klass.define_singleton_method(:ransackable_associations) do |_auth_object = nil|
+        []
+      end
     end
 
   end # module
