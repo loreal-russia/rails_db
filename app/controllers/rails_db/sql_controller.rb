@@ -10,7 +10,7 @@ module RailsDb
     end
 
     def csv
-      file = Tempfile.new('results', Tempfile.new('results', Rails.root.join('tmp').to_s))
+      file = Tempfile.new('results', Rails.root.join('tmp').to_s)
       @sql_query.write_csv(file)
       file.close
       send_file(file.path, type: 'text/csv; charset=utf-8; header=present', filename: 'results.csv')
