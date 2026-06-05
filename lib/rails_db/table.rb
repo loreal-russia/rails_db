@@ -5,10 +5,6 @@ module RailsDb
   class Table
     include Connection
 
-    def self.ransackable_attributes(_auth_object = nil)
-      ['q']
-    end
-
     attr_reader :name, :data
 
     delegate :count,     to: :data
@@ -58,6 +54,9 @@ module RailsDb
           end
           self.table_name = table_name
           self.inheritance_column = nil
+          def self.ransackable_attributes(_auth_object = nil)
+            ['q']
+          end
         end
       end
 
